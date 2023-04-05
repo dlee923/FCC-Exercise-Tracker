@@ -80,13 +80,11 @@ app.post('api/users/:_id/exercises', function(req, res) {
 
 // get API endpoints
 app.get('/api/users', function(req, res) {
-  UserModel.find().then(function(err, usernameData) {
-    if (err !== null) {
-      console.log('Query users: Error...')
-    } else {
-      console.log('Query users: Success...')
-      res.json({users: usernameData})            
-    }
+  UserModel.find().then((usernameData) => {    
+    console.log('Query users: Success...');
+    res.json({users: usernameData});
+  }).catch((err) => {
+    console.log('Query users: Error...');
   })
 });
 
