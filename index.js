@@ -43,6 +43,7 @@ function createAndSaveNewUser(username, response) {
       console.log('Saving new user ' + username + ': Error...')
       response.json({error: 'something went wrong saving new user.'});
     }    
+    console.log('does this error message fire?')
   })
 }
 
