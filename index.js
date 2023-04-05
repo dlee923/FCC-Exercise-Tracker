@@ -35,22 +35,18 @@ function createAndSaveNewUser(username) {
   let newUser = UserModel({
     username: username
   });
-  newUser.save((err, newUserData) => {
-    if (err !== null) {
-      console.log('Saving new user ' + newUserData.username + ': Error...')
-    } else {
-      console.log('Saving new user ' + newUserData.username + ': Success...')
-    }
+  newUser.save().then((newUserData) => {
+    console.log('Saving new user ' + newUserData.username + ': Success...')    
+  }).catch((err) => {
+    console.log('Saving new user ' + username + ': Error...')
   })
 }
 
 function createAndAddExercisesTo(userID, exerciseObj) {
-  exerciseObj.save((err, exerciseData) => {
-    if (err !== null) {
-      console.log('Saving exercise ' + exerciseObj.description + ': Error...')
-    } else {
-      console.log('Saving exercise ' + exerciseObj.description + ': Success...')
-    }
+  exerciseObj.save().then((exerciseData) => {
+    console.log('Saving exercise ' + exerciseData.description + ': Success...')    
+  }).catch((err) => {
+    console.log('Saving exercise ' + exerciseObj.description + ': Error...')
   })
 }
 
@@ -84,7 +80,9 @@ app.get('/api/users', function(req, res) {
     console.log('Query users: Success...');
     res.json({users: usernameData});
   }).catch((err) => {
-    console.log('Query users: Error...');
+    console.log('------------ Query users: Error... ------------');
+    console.log(err)
+    console.log('------------ Error ------------');
   })
 });
 
