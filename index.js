@@ -37,18 +37,20 @@ function createAndSaveNewUser(username, response) {
   });
   newUser.save().then((newUserData) => {
     console.log('Saving new user ' + newUserData.username + ': Success...');    
-    response.redirect('https://fcc-exercise-tracker.dlee923.repl.co//api/users');    
+    response.redirect('https://fcc-exercise-tracker.dlee923.repl.co//api/users');
   }).catch((err) => {    
     console.log('Saving new user ' + username + ': Error...')
     response.json({error: 'something went wrong saving new user.'});
   })
 }
 
-function createAndAddExercisesTo(userID, exerciseObj) {
+function createAndAddExercisesTo(userID, exerciseObj, response) {
   exerciseObj.save().then((exerciseData) => {
-    console.log('Saving exercise ' + exerciseData.description + ': Success...')    
+    console.log('Saving exercise ' + exerciseData.description + ': Success...');
+    response.redirect('https://fcc-exercise-tracker.dlee923.repl.co//api/users/' + userID + '/exercises');
   }).catch((err) => {
-    console.log('Saving exercise ' + exerciseObj.description + ': Error...')
+    console.log('Saving exercise ' + exerciseObj.description + ': Error...');
+    response.json({error: 'something went wrong saving exercise.'});
   })
 }
 
@@ -74,7 +76,7 @@ app.post('api/users/:_id/exercises', function(req, res) {
     duration: duration,
     date: date
   }
-  createAndAddExercisesTo(uid, newExerciseObj);
+  createAndAddExercisesTo(uid, newExerciseObj, res);
 });
 
 // get API endpoints
