@@ -39,8 +39,10 @@ function createAndSaveNewUser(username, response) {
     console.log('Saving new user ' + newUserData.username + ': Success...')
     response.redirect(window.location.href + '/api/users');
   }).catch((err) => {
-    console.log('Saving new user ' + username + ': Error...')
-    response.json({error: 'something went wrong saving new user.'});
+    if (err !== null) {
+      console.log('Saving new user ' + username + ': Error...')
+      response.json({error: 'something went wrong saving new user.'});
+    }    
   })
 }
 
