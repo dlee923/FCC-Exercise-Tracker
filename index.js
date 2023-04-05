@@ -31,14 +31,16 @@ const exerciseSchema = new mongoose.Schema({
 const UserModel = mongoose.model('UserModel', userSchema);
 const ExerciseModel = mongoose.model('ExerciseModel', exerciseSchema);
 
-function createAndSaveNewUser(username) {
+function createAndSaveNewUser(username, response) {
   let newUser = UserModel({
     username: username
   });
   newUser.save().then((newUserData) => {
-    console.log('Saving new user ' + newUserData.username + ': Success...')    
+    console.log('Saving new user ' + newUserData.username + ': Success...')
+    response.redirect(window.location.href + '/api/users');
   }).catch((err) => {
     console.log('Saving new user ' + username + ': Error...')
+    response.json({error: 'something went wrong saving new user.'});
   })
 }
 
@@ -56,7 +58,8 @@ app.use('/', bodyParser.urlencoded({ extended: false }));
 // post API endpoints
 app.post('/api/users', function(req, res) {
   let newUsername = req.body.username;
-  createAndSaveNewUser(newUsername);
+  createAndSaveNewUser(newUsername, res);
+  
 });
 
 app.post('api/users/:_id/exercises', function(req, res) {
