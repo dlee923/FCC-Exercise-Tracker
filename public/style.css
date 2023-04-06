@@ -21,7 +21,8 @@ p {
 form {
   margin-bottom: 25px;
   padding: 15px;
-  background-color: #87D37C;
+  background-color: indigo;
+  color: white;
   display: inline-block;
   width: 100%;
   max-width: 340px;
@@ -55,5 +56,6 @@ code {
   font-family: monospace;
   font-size: 1.2em;
   background-color: #FFFEC4;
+  color: black;
   padding: 2px;
 }
