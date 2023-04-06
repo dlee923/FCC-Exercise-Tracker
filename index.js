@@ -37,7 +37,7 @@ function createAndSaveNewUser(username, response) {
     username: username
   });
   newUser.save().then((newUserData) => {
-    console.log('Saving new user ' + newUserData.username + ': Success...');    
+    console.log('Saving new user ' + newUserData.username + ': Success...');
     response.json({ username: newUserData.username, _id: newUserData._id });
   }).catch((err) => {    
     console.log('Saving new user ' + username + ': Error...')
