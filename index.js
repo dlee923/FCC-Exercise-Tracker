@@ -40,6 +40,7 @@ app.post('/api/users', function(req, res) {
 });
 
 app.post('api/users/:_id/exercises', function(req, res) {
+  console.log("post exercise");
   let uid = req.body[":_id"];
   let description = req.body.description;
   let duration = req.body.duration;
@@ -67,6 +68,7 @@ function createAndSaveNewUser(username, response) {
 }
 
 function createAndAddExercisesTo(userID, exerciseObj, response) {
+  console.log('create and add exercise');
   UserModel.findByIdAndUpdate(userID, {log: exerciseObj}, {new: true}).then((userExerciseData) => {
     console.log('Saving exercise ' + userExerciseData.description + ': Success...');
     let userExerciseObj = userExerciseData;
