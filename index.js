@@ -37,11 +37,11 @@ function createAndSaveNewUser(username, response) {
     username: username
   });
   newUser.save().then((newUserData) => {
-    console.log('Saving new user ' + newUserData.username + ': Success...');
-    response.json({ username: newUserData.username, _id: newUserData._id })
-  }).catch((err) => {
+    console.log('Saving new user ' + newUserData.username + ': Success...');    
+    response.json({ username: newUserData.username, _id: newUserData._id });
+  }).catch((err) => {    
     console.log('Saving new user ' + username + ': Error...')
-    response.json({ error: 'something went wrong saving new user.' });
+    response.json({error: 'something went wrong saving new user.'});
   })
 }
 
@@ -51,7 +51,7 @@ function createAndAddExercisesTo(userID, exerciseObj, response) {
     response.redirect('https://fcc-exercise-tracker.dlee923.repl.co/api/users/' + userID + '/exercises');
   }).catch((err) => {
     console.log('Saving exercise ' + exerciseObj.description + ': Error...');
-    response.json({ error: 'something went wrong saving exercise.' });
+    response.json({error: 'something went wrong saving exercise.'});
   })
 }
 
@@ -81,9 +81,9 @@ app.post('api/users/:_id/exercises', function(req, res) {
 
 // get API endpoints
 app.get('/api/users', function(req, res) {
-  UserModel.find().select(['username']).then((usernameData) => {
+  UserModel.find({username: req.body.username}).select(['username']).then((usernameData) => {    
     console.log('Query users: Success...');
-    res.json({ usernameData });
+    res.json({usernameData});
   }).catch((err) => {
     logError("Query users", err);
   })
@@ -98,7 +98,7 @@ app.get('/api/users/:id/logs', function(req, res) {
     console.log('Query one user: Success...')
     username = usernameData.username;
 
-    ExerciseModel.find({ _id: _id }).then((exerciseData) => {
+    ExerciseModel.find({_id: _id}).then((exerciseData) => {
       console.log('Query user exercises: Success...')
       log = exerciseData
       let logObj = {
@@ -111,7 +111,7 @@ app.get('/api/users/:id/logs', function(req, res) {
     }).catch((err) => {
       logError('Query user exercises', err);
     })
-
+    
   }).catch((err) => {
     logError('Query one user', err);
   })
