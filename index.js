@@ -37,7 +37,7 @@ function createAndSaveNewUser(username, response) {
   });
   newUser.save().then((newUserData) => {
     console.log('Saving new user ' + newUserData.username + ': Success...');    
-    response.redirect('https://fcc-exercise-tracker.dlee923.repl.co//api/users');
+    response.redirect('https://fcc-exercise-tracker.dlee923.repl.co/api/users');
   }).catch((err) => {    
     console.log('Saving new user ' + username + ': Error...')
     response.json({error: 'something went wrong saving new user.'});
@@ -47,7 +47,7 @@ function createAndSaveNewUser(username, response) {
 function createAndAddExercisesTo(userID, exerciseObj, response) {
   exerciseObj.save().then((exerciseData) => {
     console.log('Saving exercise ' + exerciseData.description + ': Success...');
-    response.redirect('https://fcc-exercise-tracker.dlee923.repl.co//api/users/' + userID + '/exercises');
+    response.redirect('https://fcc-exercise-tracker.dlee923.repl.co/api/users/' + userID + '/exercises');
   }).catch((err) => {
     console.log('Saving exercise ' + exerciseObj.description + ': Error...');
     response.json({error: 'something went wrong saving exercise.'});
@@ -85,11 +85,43 @@ app.get('/api/users', function(req, res) {
     console.log('Query users: Success...');
     res.json({usernameData});
   }).catch((err) => {
-    console.log('------------ Query users: Error... ------------');
-    console.log(err)
-    console.log('------------ Error ------------');
+    logError("Query users", err);
   })
 });
+
+app.get('/api/users/:id/logs', function(req, res) {
+  let username = ''
+  let count = ''
+  let _id = req.params.id;
+  let log = ''
+  UserModel.find().where('username').all(req.params.id).then((usernameData) => {
+    console.log('Query one user: Success...')
+    username = usernameData.username;
+
+    ExerciseModel.find({_id: _id}).then((exerciseData) => {
+      console.log('Query user exercises: Success...')
+      log = exerciseData
+      let logObj = {
+        username: username,
+        count: log.length,
+        _id: _id,
+        log: log
+      }
+      res.json(logObj);
+    }).catch((err) => {
+      logError('Query user exercises', err);
+    })
+    
+  }).catch((err) => {
+    logError('Query one user', err);
+  })
+});
+
+function logError(fxPurpose, err) {
+  console.log('------------ ' + fxPurpose + ': Error... ------------');
+  console.log(err)
+  console.log('------------ Error ------------');
+}
 
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log('Your app is listening on port ' + listener.address().port)
