@@ -32,16 +32,13 @@ const exerciseSchema = new mongoose.Schema({
 const UserModel = mongoose.model('UserModel', userSchema);
 const ExerciseModel = mongoose.model('ExerciseModel', exerciseSchema);
 
-let newUserSavedID = 0;
-
 function createAndSaveNewUser(username, response) {
   let newUser = UserModel({
     username: username
   });
   newUser.save().then((newUserData) => {
     console.log('Saving new user ' + newUserData.username + ': Success...');
-    newUserSavedID = newUserData._id;
-    response.redirect('https://fcc-exercise-tracker.dlee923.repl.co/api/users');
+    response.json({ username: newUserData.username, _id: newUserData._id })
   }).catch((err) => {
     console.log('Saving new user ' + username + ': Error...')
     response.json({ error: 'something went wrong saving new user.' });
@@ -84,7 +81,7 @@ app.post('api/users/:_id/exercises', function(req, res) {
 
 // get API endpoints
 app.get('/api/users', function(req, res) {
-  UserModel.findOne({ _id: newUserSavedID }).select(['username']).then((usernameData) => {
+  UserModel.find().select(['username']).then((usernameData) => {
     console.log('Query users: Success...');
     res.json({ usernameData });
   }).catch((err) => {
