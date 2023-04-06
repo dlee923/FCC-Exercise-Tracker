@@ -71,8 +71,9 @@ function createAndAddExercisesTo(userID, exerciseObj, response) {
     console.log('Saving exercise ' + userExerciseData.description + ': Success...');
     let userExerciseObj = userExerciseData;
     userExerciseObj._id = userID;
-    userExerciseData.username = "some username"
-    response.redirect('https://fcc-exercise-tracker.dlee923.repl.co/api/users/' + userID + '/exercises');
+    userExerciseObj.username = "some username"
+    response.json(userExerciseObj);
+    // response.redirect('https://fcc-exercise-tracker.dlee923.repl.co/api/users/' + userID + '/exercises');
   }).catch((err) => {
     console.log('Saving exercise ' + exerciseObj.description + ': Error...');
     response.json({error: 'something went wrong saving exercise.'});
