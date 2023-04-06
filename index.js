@@ -81,7 +81,7 @@ app.post('api/users/:_id/exercises', function(req, res) {
 
 // get API endpoints
 app.get('/api/users', function(req, res) {
-  UserModel.find().select(['username']).then((usernameData) => {    
+  UserModel.find({username: req.body.username}).select(['username']).then((usernameData) => {    
     console.log('Query users: Success...');
     res.json({usernameData});
   }).catch((err) => {
