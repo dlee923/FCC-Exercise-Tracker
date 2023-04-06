@@ -38,8 +38,8 @@ app.post('/api/users', function(req, res) {
   createAndSaveNewUser(newUsername, res);
 });
 
-app.post('api/users/:id/exercises', function(req, res) {
-  console.log("post exercise");
+// app.post('api/users/:id/exercises', function(req, res) {
+//   console.log("post exercise");
   // let uid = req.params.id;
   // let description = req.body.description;
   // let duration = req.body.duration;
@@ -50,7 +50,7 @@ app.post('api/users/:id/exercises', function(req, res) {
   //   date: date
   // }
   // createAndAddExercisesTo(uid, newExerciseObj, res);
-});
+// });
 
 // post helper methods
 function createAndSaveNewUser(username, response) {
