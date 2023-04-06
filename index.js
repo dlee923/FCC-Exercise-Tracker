@@ -36,14 +36,11 @@ function createAndSaveNewUser(username, response) {
     username: username
   });
   newUser.save().then((newUserData) => {
-    console.log('Saving new user ' + newUserData.username + ': Success...')
-    response.redirect(window.location.href + '/api/users');
-  }).catch((err) => {
-    if (err !== null) {
-      console.log('Saving new user ' + username + ': Error...')
-      response.json({error: 'something went wrong saving new user.'});
-    }    
-    console.log('does this error message fire?')
+    console.log('Saving new user ' + newUserData.username + ': Success...');    
+    response.redirect('https://fcc-exercise-tracker.dlee923.repl.co//api/users');    
+  }).catch((err) => {    
+    console.log('Saving new user ' + username + ': Error...')
+    response.json({error: 'something went wrong saving new user.'});
   })
 }
 
@@ -84,7 +81,7 @@ app.post('api/users/:_id/exercises', function(req, res) {
 app.get('/api/users', function(req, res) {
   UserModel.find().then((usernameData) => {    
     console.log('Query users: Success...');
-    res.json({users: usernameData});
+    res.json({usernameData});
   }).catch((err) => {
     console.log('------------ Query users: Error... ------------');
     console.log(err)
