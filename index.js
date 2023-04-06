@@ -69,6 +69,9 @@ function createAndSaveNewUser(username, response) {
 function createAndAddExercisesTo(userID, exerciseObj, response) {
   UserModel.findByIdAndUpdate(userID, {log: exerciseObj}, {new: true}).then((userExerciseData) => {
     console.log('Saving exercise ' + userExerciseData.description + ': Success...');
+    let userExerciseObj = userExerciseData;
+    userExerciseObj._id = userID;
+    userExerciseData.username = "some username"
     response.redirect('https://fcc-exercise-tracker.dlee923.repl.co/api/users/' + userID + '/exercises');
   }).catch((err) => {
     console.log('Saving exercise ' + exerciseObj.description + ': Error...');
