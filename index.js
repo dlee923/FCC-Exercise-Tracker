@@ -92,10 +92,10 @@ app.get('/api/users', function(req, res) {
 });
 
 app.get('/api/users/:id/exercises', function(req, res) {
-  console.log(req.params.id);
   UserModel.findById(req.params.id).then((usernameExerciseData) => {
     console.log('Query user exercises: Success...');
-    json.res(usernameExerciseData);
+    console.log(usernameExerciseData);
+    res.json(usernameExerciseData);
   }).catch((err) => {
     logError('Query user exercises', err, res);
   })
