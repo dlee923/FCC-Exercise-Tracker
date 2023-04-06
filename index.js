@@ -32,29 +32,6 @@ const exerciseSchema = new mongoose.Schema({
 const UserModel = mongoose.model('UserModel', userSchema);
 const ExerciseModel = mongoose.model('ExerciseModel', exerciseSchema);
 
-function createAndSaveNewUser(username, response) {
-  let newUser = UserModel({
-    username: username
-  });
-  newUser.save().then((newUserData) => {
-    console.log('Saving new user ' + newUserData.username + ': Success...');
-    response.json({ username: newUserData.username, _id: newUserData._id });
-  }).catch((err) => {    
-    console.log('Saving new user ' + username + ': Error...')
-    response.json({error: 'something went wrong saving new user.'});
-  })
-}
-
-function createAndAddExercisesTo(userID, exerciseObj, response) {
-  exerciseObj.save().then((exerciseData) => {
-    console.log('Saving exercise ' + exerciseData.description + ': Success...');
-    response.redirect('https://fcc-exercise-tracker.dlee923.repl.co/api/users/' + userID + '/exercises');
-  }).catch((err) => {
-    console.log('Saving exercise ' + exerciseObj.description + ': Error...');
-    response.json({error: 'something went wrong saving exercise.'});
-  })
-}
-
 // enable bodyparser
 app.use('/', bodyParser.urlencoded({ extended: false }));
 
@@ -78,6 +55,30 @@ app.post('api/users/:_id/exercises', function(req, res) {
   }
   createAndAddExercisesTo(uid, newExerciseObj, res);
 });
+
+// post helper methods
+function createAndSaveNewUser(username, response) {
+  let newUser = UserModel({
+    username: username
+  });
+  newUser.save().then((newUserData) => {
+    console.log('Saving new user ' + newUserData.username + ': Success...');
+    response.json({ username: newUserData.username, _id: newUserData._id });
+  }).catch((err) => {    
+    console.log('Saving new user ' + username + ': Error...')
+    response.json({error: 'something went wrong saving new user.'});
+  })
+}
+
+function createAndAddExercisesTo(userID, exerciseObj, response) {
+  exerciseObj.save().then((exerciseData) => {
+    console.log('Saving exercise ' + exerciseData.description + ': Success...');
+    response.redirect('https://fcc-exercise-tracker.dlee923.repl.co/api/users/' + userID + '/exercises');
+  }).catch((err) => {
+    console.log('Saving exercise ' + exerciseObj.description + ': Error...');
+    response.json({error: 'something went wrong saving exercise.'});
+  })
+}
 
 // get API endpoints
 app.get('/api/users', function(req, res) {
