@@ -17,8 +17,7 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 // MongoDB Schemas
 const userSchema = new mongoose.Schema({
   username: String,
-  count: log.length,
-  log: [exerciseSchema]
+  log: []
 });
 
 const exerciseSchema = new mongoose.Schema({
