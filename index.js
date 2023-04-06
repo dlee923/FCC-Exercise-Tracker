@@ -87,23 +87,25 @@ app.get('/api/users', function(req, res) {
     console.log('Query users: Success...');
     res.json({usernameData});
   }).catch((err) => {
-    logError("Query users", err);
+    logError("Query users", err, res);
   })
 });
 
 app.get('/api/users/:id/exercises', function(req, res) {
+  console.log(req.params.id);
   UserModel.findOne({_id: req.params.id}).then((usernameExerciseData) => {
-    console.log('Query one user: Success...');
+    console.log('Query user exercises: Success...');
     json.res(usernameExerciseData);
   }).catch((err) => {
-    logError('Query one user', err);
+    logError('Query user exercises', err, res);
   })
 });
 
-function logError(fxPurpose, err) {
+function logError(fxPurpose, err, response) {
   console.log('------------ ' + fxPurpose + ': Error... ------------');
   console.log(err)
   console.log('------------ Error ------------');
+  response.json({error: 'invalid request'})
 }
 
 const listener = app.listen(process.env.PORT || 3000, () => {
