@@ -28,7 +28,6 @@ const exerciseSchema = new mongoose.Schema({
 
 // MongoDB Models
 const UserModel = mongoose.model('UserModel', userSchema);
-const ExerciseModel = mongoose.model('ExerciseModel', exerciseSchema);
 
 // enable bodyparser
 app.use('/', bodyParser.urlencoded({ extended: false }));
@@ -92,8 +91,8 @@ app.get('/api/users', function(req, res) {
   })
 });
 
-app.get('/api/users/:id/logs', function(req, res) {
-  UserModel.find().where('_id').all(req.params.id).then((usernameExerciseData) => {
+app.get('/api/users/:id/exercises', function(req, res) {
+  UserModel.findOne({_id: req.params.id}).then((usernameExerciseData) => {
     console.log('Query one user: Success...');
     json.res(usernameExerciseData);
   }).catch((err) => {
