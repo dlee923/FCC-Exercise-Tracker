@@ -21,8 +21,6 @@ const userSchema = new mongoose.Schema({
 });
 
 const exerciseSchema = new mongoose.Schema({
-  uid: String,
-  username: String,
   description: { type: String, require: true },
   duration: { type: Number, require: true },
   date: Date
@@ -47,8 +45,6 @@ app.post('api/users/:_id/exercises', function(req, res) {
   let duration = req.body.duration;
   let date = req.body.date;
   let newExerciseObj = {
-    uid: uid,
-    username: '',
     description: description,
     duration: duration,
     date: date
@@ -71,8 +67,8 @@ function createAndSaveNewUser(username, response) {
 }
 
 function createAndAddExercisesTo(userID, exerciseObj, response) {
-  exerciseObj.save().then((exerciseData) => {
-    console.log('Saving exercise ' + exerciseData.description + ': Success...');
+  UserModel.findByIdAndUpdate(userID, {log: exerciseObj}, {new: true}).then((userExerciseData) => {
+    console.log('Saving exercise ' + userExerciseData.description + ': Success...');
     response.redirect('https://fcc-exercise-tracker.dlee923.repl.co/api/users/' + userID + '/exercises');
   }).catch((err) => {
     console.log('Saving exercise ' + exerciseObj.description + ': Error...');
