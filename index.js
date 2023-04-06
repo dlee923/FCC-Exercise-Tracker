@@ -87,28 +87,9 @@ app.get('/api/users', function(req, res) {
 });
 
 app.get('/api/users/:id/logs', function(req, res) {
-  let username = ''
-  let count = ''
-  let _id = req.params.id;
-  let log = ''
-  UserModel.find().where('username').all(req.params.id).then((usernameData) => {
-    console.log('Query one user: Success...')
-    username = usernameData.username;
-
-    ExerciseModel.find({_id: _id}).then((exerciseData) => {
-      console.log('Query user exercises: Success...')
-      log = exerciseData
-      let logObj = {
-        username: username,
-        count: log.length,
-        _id: _id,
-        log: log
-      }
-      res.json(logObj);
-    }).catch((err) => {
-      logError('Query user exercises', err);
-    })
-    
+  UserModel.find().where('_id').all(req.params.id).then((usernameExerciseData) => {
+    console.log('Query one user: Success...');
+    json.res(usernameExerciseData);
   }).catch((err) => {
     logError('Query one user', err);
   })
