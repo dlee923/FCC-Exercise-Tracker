@@ -38,9 +38,9 @@ app.post('/api/users', function(req, res) {
   createAndSaveNewUser(newUsername, res);
 });
 
-app.post('api/users/:_id/exercises', function(req, res) {
+app.post('api/users/:id/exercises', function(req, res) {
   console.log("post exercise");
-  let uid = req.body[":_id"];
+  let uid = req.params.id;
   let description = req.body.description;
   let duration = req.body.duration;
   let date = req.body.date;
