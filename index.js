@@ -93,7 +93,7 @@ app.get('/api/users', function(req, res) {
 
 app.get('/api/users/:id/exercises', function(req, res) {
   console.log(req.params.id);
-  UserModel.findOne({_id: req.params.id}).then((usernameExerciseData) => {
+  UserModel.findById(req.params.id).then((usernameExerciseData) => {
     console.log('Query user exercises: Success...');
     json.res(usernameExerciseData);
   }).catch((err) => {
