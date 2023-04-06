@@ -42,19 +42,19 @@ app.post('/api/users', function(req, res) {
   createAndSaveNewUser(newUsername, res);
 });
 
-// app.post('api/users/:id/exercises', function(req, res) {
-//   console.log("post exercise");
-  // let uid = req.params.id;
-  // let description = req.body.description;
-  // let duration = req.body.duration;
-  // let date = req.body.date;
-  // let newExerciseObj = {
-  //   description: description,
-  //   duration: duration,
-  //   date: date
-  // }
-  // createAndAddExercisesTo(uid, newExerciseObj, res);
-// });
+app.post('/api/users/:id/exercises', function(req, res) {
+  console.log('post exercise')
+  let uid = req.params.id;
+  let description = req.body.description;
+  let duration = req.body.duration;
+  let date = req.body.date;
+  let newExerciseObj = {
+    description: description,
+    duration: duration,
+    date: date
+  }
+  createAndAddExercisesTo(uid, newExerciseObj, res);
+});
 
 // post helper methods
 function createAndSaveNewUser(username, response) {
@@ -71,14 +71,17 @@ function createAndSaveNewUser(username, response) {
 }
 
 function createAndAddExercisesTo(userID, exerciseObj, response) {
-  console.log('create and add exercise');
+  console.log('create exercise')
   UserModel.findByIdAndUpdate(userID, {log: exerciseObj}, {new: true}).then((userExerciseData) => {
-    console.log('Saving exercise ' + userExerciseData.description + ': Success...');
-    let userExerciseObj = userExerciseData;
-    userExerciseObj._id = userID;
-    userExerciseObj.username = "some username"
+    console.log('Saving exercise ' + exerciseObj.description + ': Success...');
+    let userExerciseObj = {
+      username: "some username",
+      _id: userID,
+      description: exerciseObj.description,
+      duration: exerciseObj.duration,
+      date: exerciseObj.date
+    }
     response.json(userExerciseObj);
-    // response.redirect('https://fcc-exercise-tracker.dlee923.repl.co/api/users/' + userID + '/exercises');
   }).catch((err) => {
     console.log('Saving exercise ' + exerciseObj.description + ': Error...');
     response.json({error: 'something went wrong saving exercise.'});
