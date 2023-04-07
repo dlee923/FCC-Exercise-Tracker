@@ -51,7 +51,7 @@ app.post('/api/users/:id/exercises', function(req, res) {
   let newExerciseObj = {
     description: description,
     duration: duration,
-    date: date.toDateString()
+    date: date
   }
   UserModel.findOne({_id: uid}).then((usernameData) => {
     createAndAddExercisesTo(uid, usernameData.username, newExerciseObj, res);
@@ -63,7 +63,8 @@ app.post('/api/users/:id/exercises', function(req, res) {
 // post helper methods
 function createAndSaveNewUser(username, response) {
   let newUser = UserModel({
-    username: username
+    username: username,
+    count: 0
   });
   newUser.save().then((newUserData) => {
     console.log('Saving new user ' + newUserData.username + ': Success...');
