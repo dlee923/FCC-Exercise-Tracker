@@ -75,11 +75,11 @@ function createAndAddExercisesTo(userID, exerciseObj, response) {
   UserModel.findByIdAndUpdate(userID, {log: exerciseObj}, {new: true}).then((userExerciseData) => {
     console.log('Saving exercise ' + exerciseObj.description + ': Success...');
     let userExerciseObj = {
-      username: "some username",
       _id: userID,
-      description: exerciseObj.description,
+      username: "some username",      
+      date: exerciseObj.date,
       duration: exerciseObj.duration,
-      date: exerciseObj.date
+      description: exerciseObj.description
     }
     response.json(userExerciseObj);
   }).catch((err) => {
