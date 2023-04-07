@@ -51,7 +51,7 @@ app.post('/api/users/:id/exercises', function(req, res) {
   let newExerciseObj = {
     description: description,
     duration: Number(duration),
-    date: Date(date).toDateString()
+    date: new Date(date).toDateString()
   }
   UserModel.findOne({_id: uid}).then((usernameData) => {
     createAndAddExercisesTo(uid, usernameData.username, newExerciseObj, res);
