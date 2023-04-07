@@ -112,7 +112,13 @@ app.get('/api/users/nofilter', function(req, res) {
 });
 
 app.get('/api/users/:id/logs', function(req, res) {
-  UserModel.findById(req.params.id).then((usernameExerciseData) => {
+  let from = req.query.from;
+  let to = req.query.to;
+  let limit = req.query.limit;
+
+  UserModel.findById(req.params.id)
+    .limit(limit)
+    .then((usernameExerciseData) => {
     console.log('Query user exercises: Success...');
     console.log(usernameExerciseData);
     res.json(usernameExerciseData);
