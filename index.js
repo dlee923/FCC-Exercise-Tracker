@@ -47,7 +47,7 @@ app.post('/api/users/:id/exercises', function(req, res) {
   let uid = req.params.id;
   let description = req.body.description;
   let duration = req.body.duration;
-  let date = req.body.date;
+  let date = req.body.date === null ? Date.now() : req.body.date;
   let newExerciseObj = {
     description: description,
     duration: duration,
