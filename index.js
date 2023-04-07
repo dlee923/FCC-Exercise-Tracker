@@ -72,7 +72,7 @@ function createAndSaveNewUser(username, response) {
 
 function createAndAddExercisesTo(userID, exerciseObj, response) {
   console.log('create exercise')
-  UserModel.findByIdAndUpdate(userID, {log: exerciseObj}, {new: true}).then((userExerciseData) => {
+  UserModel.findByIdAndUpdate(userID, {$push: {log: exerciseObj}}, {new: true, upsert: true}).then((userExerciseData) => {
     console.log('Saving exercise ' + exerciseObj.description + ': Success...');
     let userExerciseObj = {
       _id: userID,
