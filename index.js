@@ -43,7 +43,6 @@ app.post('/api/users', function(req, res) {
 });
 
 app.post('/api/users/:id/exercises', function(req, res) {
-  console.log('post exercise')
   let uid = req.params.id;
   let description = req.body.description;
   let duration = req.body.duration;
@@ -53,7 +52,11 @@ app.post('/api/users/:id/exercises', function(req, res) {
     duration: duration,
     date: date
   }
-  createAndAddExercisesTo(uid, newExerciseObj, res);
+  UserModel.findOne({_id: uid}).then((usernameData) => {
+    createAndAddExercisesTo(uid, usernameData.username, newExerciseObj, res);
+  }).catch((err) => {
+    logError("Querying username from uid", err, res);
+  })  
 });
 
 // post helper methods
@@ -70,13 +73,12 @@ function createAndSaveNewUser(username, response) {
   })
 }
 
-function createAndAddExercisesTo(userID, exerciseObj, response) {
-  console.log('create exercise')
+function createAndAddExercisesTo(userID, username, exerciseObj, response) {
   UserModel.findByIdAndUpdate(userID, {$push: {log: exerciseObj}}, {new: true, upsert: true}).then((userExerciseData) => {
     console.log('Saving exercise ' + exerciseObj.description + ': Success...');
     let userExerciseObj = {
       _id: userID,
-      username: "some username",      
+      username: username,
       date: exerciseObj.date,
       duration: exerciseObj.duration,
       description: exerciseObj.description
