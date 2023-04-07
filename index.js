@@ -117,8 +117,8 @@ app.get('/api/users/:id/logs', function(req, res) {
   let limit = req.query.limit;
 
   UserModel.findById(req.params.id)
-    .limit(limit)
-    .then((usernameExerciseData) => {
+    .slice('logs', limit)
+    .exec((usernameExerciseData) => {
     console.log('Query user exercises: Success...');
     console.log(usernameExerciseData);
     res.json(usernameExerciseData);
