@@ -92,7 +92,7 @@ function createAndAddExercisesTo(userID, exerciseObj, response) {
 app.get('/api/users', function(req, res) {
   UserModel.find().select(['username']).then((usernameData) => {    
     console.log('Query users: Success...');
-    res.json({usernameData['usernameData']});
+    res.json(usernameData);
   }).catch((err) => {
     logError("Query users", err, res);
   })
