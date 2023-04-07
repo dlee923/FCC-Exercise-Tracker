@@ -98,6 +98,15 @@ app.get('/api/users', function(req, res) {
   })
 });
 
+app.get('/api/users/nofilter', function(req, res) {
+  UserModel.find().then((usernameData) => {    
+    console.log('Query users: Success...');
+    res.json(usernameData);
+  }).catch((err) => {
+    logError("Query users", err, res);
+  })
+});
+
 app.get('/api/users/:id/logs', function(req, res) {
   UserModel.findById(req.params.id).then((usernameExerciseData) => {
     console.log('Query user exercises: Success...');
