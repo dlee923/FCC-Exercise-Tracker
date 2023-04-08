@@ -46,7 +46,7 @@ app.post('/api/users/:id/exercises', function(req, res) {
   let uid = req.params.id;
   let description = req.body.description;
   let duration = req.body.duration;
-  let date = new Date(/\d\d\d\d-\d\d-\d\d/.test(req.body.date)? req.body.date: Date.now());
+  let date = /\d\d\d\d-\d\d-\d\d/.test(req.body.date)? req.body.date: Date.now();
   let newExerciseObj = {
     description: description,
     duration: Number(duration),
@@ -127,14 +127,14 @@ app.get('/api/users/:id/logs', function(req, res) {
     }
 
     // Filter log data based on from-to parameters
-    if (from != null && to != null) {
+    if (from != null && /\d\d\d\d-\d\d-\d\d/.test(from) && to != null && /\d\d\d\d-\d\d-\d\d/.test(to)) {
       let fromDate = new Date(from).getTime();
       let toDate = new Date(to).getTime();
       filteredLogData = filteredLogData.filter(log => log.date >= fromDate && log.date <= toDate);
-    } else if (from != null) {
+    } else if (from != null && /\d\d\d\d-\d\d-\d\d/.test(from)) {
       let fromDate = new Date(from).getTime();
       filteredLogData = filteredLogData.filter(log => log.date >= fromDate);
-    } else if (to != null) {
+    } else if (to != null && /\d\d\d\d-\d\d-\d\d/.test(to)) {
       let toDate = new Date(to).getTime();
       filteredLogData = filteredLogData.filter(log => log.date >= toDate);
     }
