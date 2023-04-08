@@ -79,7 +79,7 @@ function createAndAddExercisesTo(userID, username, exerciseObj, response) {
     let userExerciseObj = {
       _id: userID,
       username: username,
-      date: exerciseObj.date,
+      date: new Date(exerciseObj.date).toDateString(),
       duration: exerciseObj.duration,
       description: exerciseObj.description
     }
