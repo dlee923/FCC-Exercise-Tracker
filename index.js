@@ -133,9 +133,9 @@ app.get('/api/users/:id/logs', function(req, res) {
       log: filteredLogData
     }
   res.json(usernameExerciseLogData);
-}).catch((err) => {
-  logError('Query user exercises', err, res);
-})
+  }).catch((err) => {
+    logError('Query user exercises', err, res);
+  })
 });
 
 function logError(fxPurpose, err, response) {
