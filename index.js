@@ -50,7 +50,7 @@ app.post('/api/users/:id/exercises', function(req, res) {
   let newExerciseObj = {
     description: description,
     duration: Number(duration),
-    date: new Date(date).toDateString()
+    date: new Date(date).getTime()
   }
   UserModel.findOne({ _id: uid }).then((usernameData) => {
     createAndAddExercisesTo(uid, usernameData.username, newExerciseObj, res);
@@ -128,12 +128,14 @@ app.get('/api/users/:id/logs', function(req, res) {
 
     // Filter log data based on from-to parameters
     if (from != null) {
-      let fromDate = new Date(from);
-      console.log(fromDate.toDateString());
-      filteredLogData = filteredLogData.filter(log => log.date >= fromDate.toDateString());
+      let fromDate = new Date(from).getTime();
+      filteredLogData = filteredLogData.filter(log => log.date >= fromDate);
     } else {
       console.log('no from param')
     }
+
+    // Convert all dates to a string
+    filteredLogData.forEach(log => log.date = new Date(log.date).toDateString())
     
     let usernameExerciseLogData = {
       _id: usernameExerciseData._id,
