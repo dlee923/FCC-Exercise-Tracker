@@ -123,7 +123,16 @@ app.get('/api/users/:id/logs', function(req, res) {
     if (limit >= 1) {
       filteredLogData = usernameExerciseData.log.slice(0, limit);
     } else {
-      filteredLogData = usernameExerciseData.log
+      filteredLogData = usernameExerciseData.log;
+    }
+
+    // Filter log data based on from-to parameters
+    if (from != null) {
+      let fromDate = new Date(from);
+      console.log(fromDate.toDateString());
+      filteredLogData = filteredLogData.filter(log => log.date >= fromDate.toDateString());
+    } else {
+      console.log('no from param')
     }
     
     let usernameExerciseLogData = {
@@ -132,7 +141,7 @@ app.get('/api/users/:id/logs', function(req, res) {
       count: usernameExerciseData.log.length,
       log: filteredLogData
     }
-  res.json(usernameExerciseLogData);
+    res.json(usernameExerciseLogData);
   }).catch((err) => {
     logError('Query user exercises', err, res);
   })
