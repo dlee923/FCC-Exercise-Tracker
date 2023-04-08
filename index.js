@@ -21,7 +21,7 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 // MongoDB Schemas
 const userSchema = new mongoose.Schema({
   username: String,
-  log: {type: Array, require: false}
+  log: { type: Array, require: false }
 });
 
 const exerciseSchema = new mongoose.Schema({
@@ -52,11 +52,11 @@ app.post('/api/users/:id/exercises', function(req, res) {
     duration: Number(duration),
     date: new Date(date).toDateString()
   }
-  UserModel.findOne({_id: uid}).then((usernameData) => {
+  UserModel.findOne({ _id: uid }).then((usernameData) => {
     createAndAddExercisesTo(uid, usernameData.username, newExerciseObj, res);
   }).catch((err) => {
     logError("Querying username from uid", err, res);
-  })  
+  })
 });
 
 // post helper methods
@@ -67,14 +67,14 @@ function createAndSaveNewUser(username, response) {
   newUser.save().then((newUserData) => {
     console.log('Saving new user ' + newUserData.username + ': Success...');
     response.json({ username: newUserData.username, _id: newUserData._id });
-  }).catch((err) => {    
+  }).catch((err) => {
     console.log('Saving new user ' + username + ': Error...')
-    response.json({error: 'something went wrong saving new user.'});
+    response.json({ error: 'something went wrong saving new user.' });
   })
 }
 
 function createAndAddExercisesTo(userID, username, exerciseObj, response) {
-  UserModel.findByIdAndUpdate(userID, {$push: {log: exerciseObj}}, {new: true, upsert: true}).then((userExerciseData) => {
+  UserModel.findByIdAndUpdate(userID, { $push: { log: exerciseObj } }, { new: true, upsert: true }).then((userExerciseData) => {
     console.log('Saving exercise ' + exerciseObj.description + ': Success...');
     let userExerciseObj = {
       _id: userID,
@@ -86,13 +86,13 @@ function createAndAddExercisesTo(userID, username, exerciseObj, response) {
     response.json(userExerciseObj);
   }).catch((err) => {
     console.log('Saving exercise ' + exerciseObj.description + ': Error...');
-    response.json({error: 'something went wrong saving exercise.'});
+    response.json({ error: 'something went wrong saving exercise.' });
   })
 }
 
 // get API endpoints
 app.get('/api/users', function(req, res) {
-  UserModel.find().select(['username']).then((usernameData) => {    
+  UserModel.find().select(['username']).then((usernameData) => {
     console.log('Query users: Success...');
     res.json(usernameData);
   }).catch((err) => {
@@ -101,7 +101,7 @@ app.get('/api/users', function(req, res) {
 });
 
 app.get('/api/users/nofilter', function(req, res) {
-  UserModel.find().then((usernameData) => {    
+  UserModel.find().then((usernameData) => {
     console.log('Query users: Success...');
     res.json(usernameData);
   }).catch((err) => {
@@ -117,23 +117,31 @@ app.get('/api/users/:id/logs', function(req, res) {
   UserModel.findById(req.params.id)
     .then((usernameExerciseData) => {
     console.log('Query user exercises: Success...');
-    console.log(usernameExerciseData);
+    
+    // Filter log data based on limit parameter
+    let filteredLogData;
+    if (limit >= 1) {
+      filteredLogData = usernameExerciseData.log.slice(0, limit);
+    } else {
+      filteredLogData = usernameExerciseData.log
+    }
+    
     let usernameExerciseLogData = {
       _id: usernameExerciseData._id,
       username: usernameExerciseData.username,
       count: usernameExerciseData.log.length,
-      log: usernameExerciseData.log
+      log: filteredLogData
     }
-    res.json(usernameExerciseLogData);
-  }).catch((err) => {
-    logError('Query user exercises', err, res);
-  })
+  res.json(usernameExerciseLogData);
+}).catch((err) => {
+  logError('Query user exercises', err, res);
+})
 });
 
 function logError(fxPurpose, err, response) {
   console.log('------------ ' + fxPurpose + ': Error... ------------');
   console.log(err)
   console.log('------------ Error ------------');
-  response.json({error: 'invalid request'})
+  response.json({ error: 'invalid request' })
 }
 
