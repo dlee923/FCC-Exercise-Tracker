@@ -118,7 +118,13 @@ app.get('/api/users/:id/logs', function(req, res) {
     .then((usernameExerciseData) => {
     console.log('Query user exercises: Success...');
     console.log(usernameExerciseData);
-    res.json(usernameExerciseData);
+    let usernameExerciseLogData = {
+      _id: usernameExerciseData._id,
+      username: usernameExerciseData.username,
+      count: usernameExerciseData.log.length,
+      log: usernameExerciseData.log
+    }
+    res.json(usernameExerciseLogData);
   }).catch((err) => {
     logError('Query user exercises', err, res);
   })
