@@ -127,11 +127,16 @@ app.get('/api/users/:id/logs', function(req, res) {
     }
 
     // Filter log data based on from-to parameters
-    if (from != null) {
+    if (from != null && to != null) {
+      let fromDate = new Date(from).getTime();
+      let toDate = new Date(to).getTime();
+      filteredLogData = filteredLogData.filter(log => log.date >= fromDate && log.date <= toDate);
+    } else if (from != null) {
       let fromDate = new Date(from).getTime();
       filteredLogData = filteredLogData.filter(log => log.date >= fromDate);
-    } else {
-      console.log('no from param')
+    } else if (to != null) {
+      let toDate = new Date(to).getTime();
+      filteredLogData = filteredLogData.filter(log => log.date >= toDate);
     }
 
     // Convert all dates to a string
