@@ -21,7 +21,6 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 // MongoDB Schemas
 const userSchema = new mongoose.Schema({
   username: String,
-  count: Number,
   log: {type: Array, require: false}
 });
 
@@ -63,8 +62,7 @@ app.post('/api/users/:id/exercises', function(req, res) {
 // post helper methods
 function createAndSaveNewUser(username, response) {
   let newUser = UserModel({
-    username: username,
-    count: 0
+    username: username
   });
   newUser.save().then((newUserData) => {
     console.log('Saving new user ' + newUserData.username + ': Success...');
@@ -76,7 +74,7 @@ function createAndSaveNewUser(username, response) {
 }
 
 function createAndAddExercisesTo(userID, username, exerciseObj, response) {
-  UserModel.findByIdAndUpdate(userID, {$push: {log: exerciseObj}, $inc: {count: 1}}, {new: true, upsert: true}).then((userExerciseData) => {
+  UserModel.findByIdAndUpdate(userID, {$push: {log: exerciseObj}}, {new: true, upsert: true}).then((userExerciseData) => {
     console.log('Saving exercise ' + exerciseObj.description + ': Success...');
     let userExerciseObj = {
       _id: userID,
