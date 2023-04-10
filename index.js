@@ -110,6 +110,7 @@ app.get('/api/users/nofilter', function(req, res) {
 });
 
 app.get('/api/users/:id/logs', function(req, res) {
+  console.log('/api/users/' + req.params.id + '/logs?' + 'from=' + req.query.from + '&to=' + req.query.to + '&limit=' + req.query.limit);
   let from = req.query.from;
   let to = req.query.to;
   let limit = req.query.limit;
@@ -117,26 +118,37 @@ app.get('/api/users/:id/logs', function(req, res) {
   UserModel.findById(req.params.id)
     .then((usernameExerciseData) => {
     console.log('Query user exercises: Success...');
-    
-    // Filter log data based on limit parameter
-    let filteredLogData;
-    if (limit >= 1) {
-      filteredLogData = usernameExerciseData.log.slice(0, limit);
-    } else {
-      filteredLogData = usernameExerciseData.log;
-    }
 
+    // initialize with default log data
+    let filteredLogData = usernameExerciseData.log;
+    
     // Filter log data based on from-to parameters
     if (from != null && /\d\d\d\d-\d\d-\d\d/.test(from) && to != null && /\d\d\d\d-\d\d-\d\d/.test(to)) {
+      console.log('from: ' + from);
+      console.log('to: ' + to);
       let fromDate = new Date(from).getTime();
       let toDate = new Date(to).getTime();
       filteredLogData = filteredLogData.filter(log => log.date >= fromDate && log.date <= toDate);
     } else if (from != null && /\d\d\d\d-\d\d-\d\d/.test(from)) {
+      console.log('from: ' + from);
       let fromDate = new Date(from).getTime();
       filteredLogData = filteredLogData.filter(log => log.date >= fromDate);
     } else if (to != null && /\d\d\d\d-\d\d-\d\d/.test(to)) {
+      console.log('to: ' + to);
       let toDate = new Date(to).getTime();
-      filteredLogData = filteredLogData.filter(log => log.date >= toDate);
+      filteredLogData = filteredLogData.filter(log => log.date <= toDate);
+    }
+
+    // Filter log data based on limit parameter
+    if (limit) {
+      console.log('limit--------: ' + limit)
+      if (limit > 0) {
+        filteredLogData = filteredLogData.slice(0, limit);  
+      } else {
+      filteredLogData = filteredLogData;
+      }
+    } else {
+      filteredLogData = filteredLogData;
     }
 
     // Convert all dates to a string
@@ -145,7 +157,7 @@ app.get('/api/users/:id/logs', function(req, res) {
     let usernameExerciseLogData = {
       _id: usernameExerciseData._id,
       username: usernameExerciseData.username,
-      count: usernameExerciseData.log.length,
+      count: filteredLogData.length,
       log: filteredLogData
     }
     res.json(usernameExerciseLogData);
